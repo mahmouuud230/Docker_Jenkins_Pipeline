@@ -1,0 +1,43 @@
+pipeline{
+tools{
+Jenkins-Project-2 2
+ maven 'mymaven'
+}
+agent any
+stages{
+ stage('Fetch the code')
+ {
+ steps{
+ git 'https://github.com/Sonal0409/MavenBuildDocker-GitHubActions.git'
+ }
+ }
+ stage('Build the Code'){
+ steps{
+ sh 'mvn package'
+ }
+ }
+ stage('Build the dockerfile')
+ {
+ steps{
+ sh 'docker build -t mycontimage .'
+ }
+ }
+ stage('Push the image to Docker hub')
+ {
+ steps{
+ sh 'docker tag mycontimage mahmouuud123123/dev
+opsproject'
+ sh 'docker login --username mahmouuud123123 --p
+assword mahmouuud123123'
+Jenkins-Project-2 3
+ sh 'docker push mahmouuud123123/devopsproject'
+ }
+ }
+ stage('Deploy the Image')
+ {
+ steps{
+ sh 'docker run -d -P mycontimage '
+ }
+ }
+}
+}
